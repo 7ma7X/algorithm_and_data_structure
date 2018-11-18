@@ -1,6 +1,10 @@
-def quick_sort(arr, i, j)
+# 配列のi番目からj番目の要素のうち、小さい方からm番目を返す
+
+def quick_select(arr, i, j, m)
+  p [arr, i, j, m] # 検証用
+
   if i >= j
-    return
+    return arr[i]
   end
 
   pivot = find_pivot(arr, i, j)
@@ -8,15 +12,17 @@ def quick_sort(arr, i, j)
   unless pivot
     return
   end
- 
-  p "pivot=#{pivot}" # 経過確認用
 
+  # iからk-1にpivotより小さい要素、kからjにpivot以上の要素
   k = partition(arr, i, j, pivot)
 
-  p arr # 経過確認用
-
-  quick_sort(arr, i, k-1)
-  quick_sort(arr, k, j)
+  if m < (k - i)
+    # 前半を走査
+    return quick_select(arr, i, k-1, m)
+  else
+    # 後半を走査
+    return quick_select(arr, k, j, m-k+i)
+  end
 end
 
 # arrayのiからjまでを走査し、異なる2つの値が得られたら大きい方を返す
@@ -54,6 +60,10 @@ def partition(arr, l, r, pivot)
   end
 end
 
+(0..6).each do |i|
+  p "#{i}番目は#{quick_select([6, 2, 8, 4, 7, 3, 9], 0, 6, i)}"
+end
 
-quick_sort([6, 2, 8, 4, 7, 3, 9], 0, 6)
-quick_sort([18, 35, 76, 23, 49, 42, 31, 12], 0, 7)
+(0..7).each do |i|
+  p "#{i}番目は#{quick_select([18, 35, 76, 23, 49, 42, 31, 12], 0, 7, i)}"
+end
