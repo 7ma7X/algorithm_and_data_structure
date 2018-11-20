@@ -40,7 +40,7 @@ def merge_sort(arr)
   arr0 = merge_sort(arr[0...(l/2)])
   arr1 = merge_sort(arr[(l/2)...l])
 
-  p "#{merge(arr0, arr1)}に並び替え"
+  p "#{merge(arr0, arr1)}に並び替え" # 経過表示
   merge(arr0, arr1)
 end
 
