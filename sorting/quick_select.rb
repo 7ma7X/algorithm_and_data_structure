@@ -30,7 +30,7 @@ end
 def find_pivot(arr, i, j)
   b = arr[i]
 
-  (i+1..j).each do |m|
+  (i+1).upto(j) do |m|
     if arr[m] > b
       return arr[m]
     elsif arr[m] < b
@@ -60,10 +60,10 @@ def partition(arr, l, r, pivot)
   end
 end
 
-(0..6).each do |i|
+0.upto(6) do |i|
   p "#{i}番目は#{quick_select([6, 2, 8, 4, 7, 3, 9], 0, 6, i)}"
 end
 
-(0..7).each do |i|
+0.upto(7) do |i|
   p "#{i}番目は#{quick_select([18, 35, 76, 23, 49, 42, 31, 12], 0, 7, i)}"
 end

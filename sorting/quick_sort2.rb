@@ -24,7 +24,7 @@ end
 def find_pivot(arr, i, j)
   b = arr[i]
 
-  (i+1..j).each do |m|
+  (i+1).upto(j) do |m|
     if arr[m] > b
       return arr[m]
     elsif arr[m] < b
