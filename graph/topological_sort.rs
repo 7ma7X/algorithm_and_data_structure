@@ -21,7 +21,7 @@ fn dfs(i: usize, v: &Vec<Edge>, visited: &mut Vec<bool>, sorted: &mut Vec<usize>
 
   println!("{} を訪問中", i); // 経過観察用
 
-  for e in &(*v) {
+  for e in v {
     if e.from == i {
       dfs(e.to, v, visited, sorted);
     }
