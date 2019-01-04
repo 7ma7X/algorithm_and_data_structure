@@ -93,35 +93,62 @@ fn merge(v: &mut Vec<i8>) {
 
 
 fn main() {
-  let mut v: Vec<i8> = vec![0; 100];
+  let n = 100;
+  
+  let mut v: Vec<i8> = vec![0; n];
+  let mut v_clone: Vec<i8> = vec![0; n];
 
   for x in v.iter_mut() {
     *x = rand::random();
   }
 
-  println!("もとの配列:");
-  println!("{:?}", v);
+  // RustのVectorはCopyができないようなのでsliceにして複製してみる
+  for i in 0..n {
+    v_clone[i] = v[i];
+  }
+
+  // TODO: assert_eq!()で書くようにする（自由変数の扱いが難しいので一旦放置）
+  println!("{}", if v == v_clone { "クローンできてます" } else { "ダメです" });
+
   bubble(&mut v);
-  println!("バブルソート完了後:");
-  println!("{:?}", v);
+  v_clone.sort_unstable();
+
+  // TODO: assert_eq!()で書くようにする（自由変数の扱いが難しいので一旦放置）
+  println!("{}", if v == v_clone { "バブルソートできてます" } else { "ダメです" });
+
 
   for x in v.iter_mut() {
     *x = rand::random();
   }
 
-  println!("もとの配列:");
-  println!("{:?}", v);
+  println!("{}", if v != v_clone { "新しく配列がシャッフルされています" } else { "ダメです" });
+
+  for i in 0..n {
+    v_clone[i] = v[i];
+  }
+
+  println!("{}", if v == v_clone { "クローンできてます" } else { "ダメです" });
+
   quick(&mut v);
-  println!("クイックソート完了後:");
-  println!("{:?}", v);
+  v_clone.sort_unstable();
+
+  println!("{}", if v == v_clone { "クイックソートできてます" } else { "ダメです" });
+
 
   for x in v.iter_mut() {
     *x = rand::random();
   }
 
-  println!("もとの配列:");
-  println!("{:?}", v);
+  println!("{}", if v != v_clone { "新しく配列がシャッフルされています" } else { "ダメです" });
+  
+  for i in 0..n {
+    v_clone[i] = v[i];
+  }
+
+  println!("{}", if v == v_clone { "クローンできてます" } else { "ダメです" });
+
   merge(&mut v);
-  println!("マージソート完了後:");
-  println!("{:?}", v);
+  v_clone.sort_unstable();
+
+  println!("{}", if v == v_clone { "マージソートできてます" } else { "ダメです" });
 }
