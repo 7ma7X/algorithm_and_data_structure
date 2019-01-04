@@ -25,10 +25,6 @@ fn quick(v: &mut Vec<i8>) {
   let mut middle_array: Vec<i8> = Vec::new();
   let mut right_array: Vec<i8> = Vec::new();
 
-  let p = left_array.len();
-  let q = middle_array.len();
-  let r = right_array.len();
-
   for i in 0..n {
     if v[i] < pivot {
       left_array.push(v[i]);
@@ -38,6 +34,10 @@ fn quick(v: &mut Vec<i8>) {
       middle_array.push(v[i]);
     }
   }
+
+  let p = left_array.len();
+  let q = middle_array.len();
+  let r = right_array.len();
 
   quick(&mut left_array);
   quick(&mut right_array);
