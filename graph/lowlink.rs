@@ -104,37 +104,22 @@ fn main() {
   let mut graph: Vec<Edge> = Vec::new();
   graph.push(Edge{ from: 0, to: 1 });
   graph.push(Edge{ from: 0, to: 3 });
-  graph.push(Edge{ from: 1, to: 0 });
   graph.push(Edge{ from: 1, to: 2 });
   graph.push(Edge{ from: 1, to: 3 });
   graph.push(Edge{ from: 1, to: 4 });
   graph.push(Edge{ from: 1, to: 5 });
-  graph.push(Edge{ from: 2, to: 1 });
   graph.push(Edge{ from: 2, to: 5 });
-  graph.push(Edge{ from: 3, to: 0 });
-  graph.push(Edge{ from: 3, to: 1 });
   graph.push(Edge{ from: 3, to: 4 });
-  graph.push(Edge{ from: 4, to: 1 });
-  graph.push(Edge{ from: 4, to: 3 });
-  graph.push(Edge{ from: 5, to: 1 });
-  graph.push(Edge{ from: 5, to: 2 });
   lowlink(graph, 6);
 
   let mut graph2: Vec<Edge> = Vec::new();
   graph2.push(Edge{ from: 0, to: 1 });
   graph2.push(Edge{ from: 0, to: 3 });
-  graph2.push(Edge{ from: 1, to: 0 });
   graph2.push(Edge{ from: 1, to: 2 });
   graph2.push(Edge{ from: 1, to: 3 });
-  graph2.push(Edge{ from: 2, to: 1 });
   graph2.push(Edge{ from: 2, to: 4 });
   graph2.push(Edge{ from: 2, to: 5 });
-  graph2.push(Edge{ from: 3, to: 0 });
-  graph2.push(Edge{ from: 3, to: 1 });
-  graph2.push(Edge{ from: 4, to: 2 });
   graph2.push(Edge{ from: 4, to: 5 });
-  graph2.push(Edge{ from: 5, to: 2 });
-  graph2.push(Edge{ from: 5, to: 4 });
   lowlink(graph2, 6);
 
   let mut graph3: Vec<Edge> = Vec::new();
