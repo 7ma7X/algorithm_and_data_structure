@@ -5,19 +5,26 @@ struct Edge {
   to: usize
 }
 
+impl PartialEq for Edge {
+  fn eq(&self, other: &Edge) -> bool {
+    self.from == other.from && self.to == other.to
+  }
+}
+
 fn lowlink(v: Vec<Edge>, n: usize) {
-  let mut visited = vec![false; n];
-  let mut used = vec![false; v.len()];
+  let mut visited = vec![false; n]; // 訪問済みか否か
+  let mut used: Vec<Edge> = Vec::new(); // DFSで使われる親子辺（そうでないのは後退辺）
   let mut num = vec![0; n];
   let mut low = vec![0; n];
 
   let mut visited_iter = 1;
 
+  // 探索
+
   for i in 0..n {
     dfs(i, &mut visited_iter, &v, &mut visited, &mut used, &mut num, &mut low);
   }
 
-  println!("親子関係: {:?}", used);
   println!("num: {:?}", num);
   println!("low: {:?}", low);
 
@@ -26,16 +33,12 @@ fn lowlink(v: Vec<Edge>, n: usize) {
   let mut root_child_num = 0;
   let mut res: HashSet<usize> = HashSet::new();
 
-  for (iter, b) in used.into_iter().enumerate() {
-    if b {
-      let tmp_from = v[iter].from;
-      let tmp_to = v[iter].to;
-      if tmp_from == 0 {
-        root_child_num = root_child_num + 1;
-      } else {
-        if low[tmp_to] >= num[tmp_from] {
-          res.insert(tmp_from);
-        }
+  for e in used {
+    if e.from == 0 {
+      root_child_num = root_child_num + 1;
+    } else {
+      if low[e.to] >= num[e.from] {
+        res.insert(e.from);
       }
     }
   }
@@ -45,7 +48,7 @@ fn lowlink(v: Vec<Edge>, n: usize) {
   println!("関節点: {:?}", res);
 }
 
-fn dfs(i: usize, n: &mut usize, v: &Vec<Edge>, visited: &mut Vec<bool>, used: &mut Vec<bool>, num: &mut Vec<usize>, low: &mut Vec<usize>) {
+fn dfs(i: usize, n: &mut usize, v: &Vec<Edge>, visited: &mut Vec<bool>, used: &mut Vec<Edge>, num: &mut Vec<usize>, low: &mut Vec<usize>) {
   if visited[i] { return; } // すでに訪問済み
   visited[i] = true; // 訪問済みの印を付ける
 
@@ -53,32 +56,47 @@ fn dfs(i: usize, n: &mut usize, v: &Vec<Edge>, visited: &mut Vec<bool>, used: &m
   *n += 1;
 
   println!("{} を訪問中", i); // 経過観察用
+  println!("{} に num として {} を割り当てた", i, num[i]); // 経過観察用
 
-  for (iter, e) in v.into_iter().enumerate() {
+  for e in v {
+    // 無向グラフなので双方向必要
     if e.from == i {
-      if !visited[e.to] { used[iter] = true; }
+      if !visited[e.to] {
+        used.push(Edge{ from: e.from, to: e.to });
+      }
       dfs(e.to, n, v, visited, used, num, low);
     }
-  }
-
-  low[i] = num[i]; // まず num にそろえる
-  for e in v {
-    if e.from == i && num[e.to] != 0 && (num[e.to] < low[i]) {
-      low[i] = num[e.to]; // 後退辺の確認
-    }
-  }
-
-  for (iter, b) in used.into_iter().enumerate() {
-    if *b {
-      let tmp_from = v[iter].from;
-      let tmp_to = v[iter].to;
-      if i == tmp_from && low[tmp_to] < low[i] {
-        low[i] = low[tmp_to];
+    if e.to == i {
+      if !visited[e.from] {
+        used.push(Edge{ from: e.to, to: e.from });
       }
+      dfs(e.from, n, v, visited, used, num, low);
     }
   }
 
-  println!("{} に {} を割り当てた", i, low[i]); // 経過観察用
+  // low の計算
+  low[i] = num[i]; // まず num にそろえる
+  // 後退辺のnumの確認
+  for e in v {
+    if e.from == i && num[e.to] != 0 
+        && !used.contains(&Edge{ from: e.from, to: e.to }) // 使用済み経路を除外したものが後退辺
+        && !used.contains(&Edge{ from: e.to, to: e.from }) {
+      low[i] = if num[e.to] < low[i] { num[e.to] } else { low[i] }; // 後退辺の先がより小さければ更新
+    }
+    if e.to == i && num[e.from] != 0 
+        && !used.contains(&Edge{ from: e.from, to: e.to })
+        && !used.contains(&Edge{ from: e.to, to: e.from }) {
+      low[i] = if num[e.from] < low[i] { num[e.from] } else { low[i] }; 
+    }
+  }
+  // 子のlowの確認
+  for e in used {
+    if i == e.from  {
+      low[i] = if low[e.to] < low[i] { low[e.to] } else { low[i] }; // 子の low がより小さければ更新
+    }
+  }
+
+  println!("{} に low として {} を割り当てた", i, low[i]); // 経過観察用
   println!("{} を訪問した", i); // 経過観察用
 }
 
@@ -118,4 +136,13 @@ fn main() {
   graph2.push(Edge{ from: 5, to: 2 });
   graph2.push(Edge{ from: 5, to: 4 });
   lowlink(graph2, 6);
+
+  let mut graph3: Vec<Edge> = Vec::new();
+  graph3.push(Edge{ from: 0, to: 1 });
+  graph3.push(Edge{ from: 0, to: 3 });
+  graph3.push(Edge{ from: 1, to: 4 });
+  graph3.push(Edge{ from: 2, to: 5 });
+  graph3.push(Edge{ from: 3, to: 4 });
+  graph3.push(Edge{ from: 4, to: 5 });
+  lowlink(graph3, 6);
 }
