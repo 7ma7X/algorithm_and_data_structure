@@ -37,6 +37,35 @@ def make_table(str)
   t.reverse()
 end
 
+# 表を一つしか使わない基本的なBM法
+def basic_kmp(text, pattern)
+  skip = make_hash(pattern)
+  skip2 = make_table(pattern)
+  n = text.length
+  m = pattern.length
+
+  # iは文書中の位置（前から走査）
+  i = 0
+
+  while i <= n - m 
+    # jは検索文字列中の位置（後ろから走査）
+    j = m - 1
+
+    while (j >= 0) && text[i+j] == pattern[j]
+      j -= 1
+      if j == -1
+        return i 
+      end
+    end
+
+    p "i=#{i}, j=#{j} で skip" # 過程の表示
+    p "skip: #{(skip.has_key?(text[i+j]) ? skip[text[i+j]] : m) + j - m + 1} と 1 の大きい方" # 過程の表示
+    i = i + [(skip.has_key?(text[i+j]) ? skip[text[i+j]] : m) + j - m + 1, 1].max
+  end
+
+  false
+end
+
 def kmp(text, pattern)
   skip = make_hash(pattern)
   skip2 = make_table(pattern)
@@ -76,3 +105,6 @@ p kmp("くくまくまふくまひくまひくまふくまひ", "ひくまふく
 p make_hash("たのみもみのみ")
 p make_table("たのみもみのみ")
 p kmp("はんなりののみすぎのみみたのみもみのみ", "たのみもみのみ")
+
+p make_hash("DAACAA")
+p basic_kmp("DAADAAACAADA", "DAACAA")

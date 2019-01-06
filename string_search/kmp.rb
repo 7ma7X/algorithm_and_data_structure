@@ -61,3 +61,6 @@ p kmp("とくままくまくたたくまくまくたくまたま", "くまくた
 
 p make_table("ささうささん")
 p kmp("さあささうささよささうささうささん", "ささうささん")
+
+p make_table("DADDAC")
+p kmp("DDADADDADDAC", "DADDAC")
