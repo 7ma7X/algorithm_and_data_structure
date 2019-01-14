@@ -1,0 +1,2 @@
+- `pairwise_alignment.rs` Needleman–Wunsch アルゴリズム, Smith-Waterman アルゴリズム
+- `shannon_coding.rs` シャノンの符号化法

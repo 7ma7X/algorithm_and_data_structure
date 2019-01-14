@@ -1,1 +1,0 @@
-- `pairwise_alignment.rs` Needleman–Wunsch アルゴリズム, Smith-Waterman アルゴリズム
